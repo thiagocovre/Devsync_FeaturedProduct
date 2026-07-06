@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Homepage (CMS index) layout.
+ *
+ * Injects the featured product box as the FIRST child of the main "content"
+ * container (before="-"), so it renders right below the header/menu and spans
+ * the full width of the content area. Nothing here touches the theme: the block,
+ * template and view model all live inside this module.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Devsync_FeaturedProduct::css/featured.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Devsync\FeaturedProduct\Block\FeaturedProduct"
+                   name="devsync.featured.product"
+                   before="-"
+                   template="Devsync_FeaturedProduct::featured.phtml">
+                <arguments>
+                    <!-- Presentation logic lives in the view model (block argument). -->
+                    <argument name="view_model" xsi:type="object">Devsync\FeaturedProduct\ViewModel\FeaturedProduct</argument>
+                    <!-- Static jsLayout skeleton; runtime values are merged by the block. -->
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="devsync-featured-stock" xsi:type="array">
+                                <item name="component" xsi:type="string">Devsync_FeaturedProduct/js/view/stock</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,130 @@
+/**
+ * Devsync_FeaturedProduct
+ *
+ * Full-width featured product box for the Luma homepage.
+ * Plain CSS (no LESS/grunt build required) so the module installs and renders
+ * with a simple `setup:upgrade` + `setup:static-content:deploy`.
+ */
+
+.devsync-featured {
+    display: block;
+    width: 100%;
+    margin: 0 0 40px;
+    box-sizing: border-box;
+}
+
+.devsync-featured__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 32px;
+    padding: 32px;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ffffff 0%, #f6f7fb 100%);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.devsync-featured__link:hover,
+.devsync-featured__link:focus {
+    text-decoration: none;
+    color: inherit;
+    border-color: #c9ccd6;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.devsync-featured__media {
+    flex: 0 0 360px;
+    max-width: 360px;
+    text-align: center;
+}
+
+.devsync-featured__image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.devsync-featured__info {
+    flex: 1 1 320px;
+    min-width: 260px;
+}
+
+.devsync-featured__badge {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: #ff5501;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.devsync-featured__name {
+    margin: 0 0 12px;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.devsync-featured__price {
+    margin-bottom: 18px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.devsync-featured__stock {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 16px;
+    color: #444;
+}
+
+.devsync-featured__stock-label {
+    color: #6d6d6d;
+}
+
+.devsync-featured__stock-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e7e34;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Subtle pulse while a refresh request is in flight. */
+.devsync-featured__stock-value.is-updating {
+    opacity: 0.45;
+}
+
+.devsync-featured__stock-unit {
+    color: #6d6d6d;
+}
+
+@media (max-width: 768px) {
+    .devsync-featured__link {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px;
+    }
+
+    .devsync-featured__media {
+        flex-basis: auto;
+    }
+
+    .devsync-featured__stock {
+        justify-content: center;
+    }
+
+    .devsync-featured__name {
+        font-size: 24px;
+    }
+}

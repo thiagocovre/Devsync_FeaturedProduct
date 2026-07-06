@@ -1,0 +1,13 @@
+<!--
+/**
+ * Devsync_FeaturedProduct
+ *
+ * Real-time salable quantity. This Knockout template is the SINGLE source of the
+ * displayed number — it is never printed in the phtml. It renders the initial
+ * value passed through jsLayout and every subsequent polled value; only this
+ * fragment re-renders, never the page. The `is-updating` class gives a subtle
+ * cue while a refresh request is in flight.
+ */
+-->
+<span class="devsync-featured__stock-value"
+      data-bind="text: qty, css: {'is-updating': isUpdating}"></span>

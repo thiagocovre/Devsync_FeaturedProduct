@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="DevsyncFeaturedProductSection">
+        <!-- The whole box + its link to the product page -->
+        <element name="box" type="block" selector=".devsync-featured"/>
+        <element name="link" type="button" selector=".devsync-featured .devsync-featured__link"/>
+        <element name="name" type="text" selector=".devsync-featured .devsync-featured__name"/>
+        <element name="price" type="text" selector=".devsync-featured .devsync-featured__price"/>
+        <element name="image" type="block" selector=".devsync-featured .devsync-featured__image"/>
+        <element name="badge" type="text" selector=".devsync-featured .devsync-featured__badge"/>
+        <!-- The live quantity is rendered by the Knockout component only -->
+        <element name="stockValue" type="text" selector=".devsync-featured .devsync-featured__stock-value"/>
+        <!-- Passes ONLY when the box is the first child of the main content column -->
+        <element name="boxIsFirst" type="block" selector="#maincontent .column.main > .devsync-featured:first-child"/>
+    </section>
+</sections>

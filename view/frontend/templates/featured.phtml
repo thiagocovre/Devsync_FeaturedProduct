@@ -1,0 +1,52 @@
+<?php
+/**
+ * Devsync_FeaturedProduct
+ *
+ * @var \Devsync\FeaturedProduct\Block\FeaturedProduct $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$viewModel = $block->getViewModel();
+
+if (!$viewModel->isEnabled()) {
+    return;
+}
+
+$boxTitle = $viewModel->getBoxTitle();
+?>
+<section class="devsync-featured" data-bind="scope: 'devsync-featured-stock'">
+    <a class="devsync-featured__link"
+       href="<?= $escaper->escapeUrl($viewModel->getProductUrl()) ?>"
+       title="<?= $escaper->escapeHtmlAttr($viewModel->getName()) ?>">
+        <div class="devsync-featured__media">
+            <img class="devsync-featured__image"
+                 src="<?= $escaper->escapeUrl($viewModel->getImageUrl()) ?>"
+                 alt="<?= $escaper->escapeHtmlAttr($viewModel->getName()) ?>"
+                 loading="lazy"/>
+        </div>
+        <div class="devsync-featured__info">
+            <?php if ($boxTitle !== ''): ?>
+                <span class="devsync-featured__badge"><?= $escaper->escapeHtml($boxTitle) ?></span>
+            <?php endif; ?>
+            <h2 class="devsync-featured__name"><?= $escaper->escapeHtml($viewModel->getName()) ?></h2>
+            <div class="devsync-featured__price"><?= $escaper->escapeHtml($viewModel->getFormattedPrice()) ?></div>
+            <div class="devsync-featured__stock">
+                <span class="devsync-featured__stock-label">
+                    <?= $escaper->escapeHtml(__('Available for sale')) ?>:
+                </span>
+                <?php /* The number itself is rendered ONLY by the Knockout component
+                         (never hardcoded here) and refreshed in real time. */ ?>
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <span class="devsync-featured__stock-unit"><?= $escaper->escapeHtml(__('unit(s)')) ?></span>
+            </div>
+        </div>
+    </a>
+
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+            }
+        }
+    </script>
+</section>

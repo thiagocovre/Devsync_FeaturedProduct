@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DevsyncFeaturedProductHomepageTest">
+        <annotations>
+            <features value="Devsync Featured Product"/>
+            <stories value="Homepage featured product box with real-time stock"/>
+            <title value="Featured product box is the first homepage element, shows product data and links to the PDP"/>
+            <description value="Creates a product, configures it as the featured product, and verifies the box renders as the first element of the main content on the Luma homepage, exposes title/price/image/stock, and navigates to the product page when clicked."/>
+            <severity value="CRITICAL"/>
+            <group value="devsync_featured_product"/>
+        </annotations>
+
+        <before>
+            <!-- A product with stock (default SimpleProduct qty = 100), created via API -->
+            <createData entity="SimpleProduct" stepKey="product"/>
+
+            <!-- Point the module at that product and enable the box -->
+            <magentoCLI command="config:set featured_product/general/enabled 1" stepKey="enable"/>
+            <magentoCLI command="config:set featured_product/general/sku $product.sku$" stepKey="setSku"/>
+            <magentoCLI command="config:set featured_product/general/title 'Deal of the day'" stepKey="setTitle"/>
+            <magentoCLI command="config:set featured_product/general/refresh_interval 3" stepKey="setInterval"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set featured_product/general/enabled 0" stepKey="disable"/>
+            <magentoCLI command="config:set featured_product/general/sku ''" stepKey="clearSku"/>
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfter"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+        </after>
+
+        <!-- Open the Luma homepage -->
+        <amOnPage url="/" stepKey="goToHomepage"/>
+        <waitForPageLoad stepKey="waitHome"/>
+
+        <!-- The box is present AND is the first child of the main content column -->
+        <seeElement selector="{{DevsyncFeaturedProductSection.box}}" stepKey="seeBox"/>
+        <seeElement selector="{{DevsyncFeaturedProductSection.boxIsFirst}}" stepKey="seeBoxIsFirst"/>
+
+        <!-- Title, price, image, badge and the (Knockout-rendered) stock value -->
+        <see selector="{{DevsyncFeaturedProductSection.name}}" userInput="$product.name$" stepKey="seeName"/>
+        <seeElement selector="{{DevsyncFeaturedProductSection.price}}" stepKey="seePrice"/>
+        <seeElement selector="{{DevsyncFeaturedProductSection.image}}" stepKey="seeImage"/>
+        <see selector="{{DevsyncFeaturedProductSection.badge}}" userInput="Deal of the day" stepKey="seeBadge"/>
+
+        <!-- Knockout must have rendered the quantity (proves the KO template IS invoked) -->
+        <waitForElementVisible selector="{{DevsyncFeaturedProductSection.stockValue}}" stepKey="waitStock"/>
+        <grabTextFrom selector="{{DevsyncFeaturedProductSection.stockValue}}" stepKey="stockText"/>
+        <assertNotEmpty stepKey="assertStockRendered">
+            <actualResult type="variable">stockText</actualResult>
+        </assertNotEmpty>
+
+        <!-- The polling endpoint answers with the salable qty as JSON -->
+        <amOnPage url="/featuredproduct/stock/index" stepKey="goToEndpoint"/>
+        <waitForPageLoad stepKey="waitEndpoint"/>
+        <see userInput='"success":true' stepKey="seeEndpointSuccess"/>
+
+        <!-- Clicking the box navigates to the product page -->
+        <amOnPage url="/" stepKey="backToHomepage"/>
+        <waitForPageLoad stepKey="waitHomeAgain"/>
+        <click selector="{{DevsyncFeaturedProductSection.link}}" stepKey="clickBox"/>
+        <waitForPageLoad stepKey="waitPdp"/>
+        <seeInTitle userInput="$product.name$" stepKey="seeOnProductPage"/>
+    </test>
+</tests>
